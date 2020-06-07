@@ -1,0 +1,26 @@
+=== Hacker Terminal Notes ===
+
+= Anagrams =
+Easy (Theme: Cooking)
+1- apron
+2- spatula
+3- knife
+4- teaspoon
+5- saute
+6- noodle
+
+Medium (Theme: Music)
+1- legato
+2- microphone
+3- synthesizer
+4- melodious
+5- instrument
+6- soprano
+
+Hard (Theme: Infomration Technology)
+1- motherboard
+2- hexidecimal
+3- initiator
+4- interface
+5- environment
+6- virtualization
