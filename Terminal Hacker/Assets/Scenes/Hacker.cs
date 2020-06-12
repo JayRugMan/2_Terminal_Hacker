@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hacker : MonoBehaviour
-{
+public class Hacker : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         ShowMainMenu();
@@ -11,6 +10,9 @@ public class Hacker : MonoBehaviour
 
     void ShowMainMenu() {
         Terminal.ClearScreen();
+        string playerName = "Jason";
+        string greeting = "Hello " + playerName;
+        Terminal.WriteLine(greeting);
         Terminal.WriteLine("WARNING:\nBeware, using this program is illegal  in all 50 states!");
         Terminal.WriteLine("With that, what would you like to hack?");
         Terminal.WriteLine(" 1- The Kitchen");
