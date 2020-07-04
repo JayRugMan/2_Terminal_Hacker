@@ -60,7 +60,7 @@ public class Hacker : MonoBehaviour {
         }
         else if (input == "2") {
             level = "Sound System";
-            pw = "melodious";
+            pw = "boombox";
             StartGame();
         }
         else if (input == "1234") {
