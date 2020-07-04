@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Hacker : MonoBehaviour {
 
+    // Game configuration
+    string[][] allPasswords = { 
+        new string[] { "apron", "knife", "sink", "noodle", "oven", "toaster" },
+        new string[] { "microphone", "boombox", "melodious", "instrument" }
+    };
+
     // Game State
-    string level;
-    int fails = 3;
+    int level;
+    string[] levelNames = { "kitchen", "sound system", "smarthome core system" };
+    int attemptsLeft;
     string pw;
     enum screen { MainMenu, Password, Win, Caught }
     screen currentScreen;
@@ -37,33 +44,36 @@ public class Hacker : MonoBehaviour {
                 string greeting = "Sure, " + playerName + ", have another go.";
                 ShowMainMenu(greeting);
             }
-            else if (currentScreen == screen.MainMenu) {
-                RunMainMenu(input);
-            }
-            else if (currentScreen == screen.Password) {
-                GuessPassword(input);
-            }
-            else if (currentScreen == screen.Win) {
-                if (input == "exit") {
-                    string greeting = "Hello " + playerName;
-                    ShowMainMenu(greeting);
+            else{
+                switch (currentScreen) {
+                    case screen.MainMenu:
+                        RunMainMenu(input);
+                        break;
+                    case screen.Password:
+                        GuessPassword(input);
+                        break;
+                    case screen.Win:
+                        if (input == "exit") {
+                            string greeting = "Hello " + playerName;
+                            ShowMainMenu(greeting);
+                        }
+                        break;
                 }
             }
         }
 	}
 
     void RunMainMenu(string input) {
-        if (input == "1") {
-            level = "Kitchen";
-            pw = "knife";
-            StartGame();
+        bool isValidLevelNumber = ( input == "1" || input == "2" );
+        if (isValidLevelNumber) {
+            level = int.Parse(input);
+            attemptsLeft = (6 / level);  // gets harder at each level
+            int index1 = level - 1;
+            int index2 = Random.Range(0, allPasswords[index1].Length);
+            pw = allPasswords[index1][index2];
+            StartGame(attemptsLeft);
         }
-        else if (input == "2") {
-            level = "Sound System";
-            pw = "boombox";
-            StartGame();
-        }
-        else if (input == "1234") {
+        else if (input == "1234") {  // easter egg
             print("That was a secret");
             string greeting = "Hey, who told you my luggage combo?!";
             ShowMainMenu(greeting);
@@ -73,9 +83,10 @@ public class Hacker : MonoBehaviour {
         }
     }
     
-    void StartGame() {
+    void StartGame(int attemptsLeft) { 
         currentScreen = screen.Password;
-        Terminal.WriteLine("Attepting to access the " + level);
+        Terminal.ClearScreen();
+        Terminal.WriteLine( attemptsLeft + " Attept(s) left to access " + levelNames[(level - 1)] );
         Terminal.WriteLine("Password: ");
     }
 
@@ -84,14 +95,12 @@ public class Hacker : MonoBehaviour {
             YouWin();
         }
         else {
-            fails--;
-            if (fails == 0) {
+            attemptsLeft--;
+            if (attemptsLeft == 0) {
                 YouFail();
             }    
             else {
-                string greeting = "Password Failed! " + fails + " fail(s) left";
-                currentScreen = screen.MainMenu;
-                ShowMainMenu(greeting);
+                StartGame(attemptsLeft);
             }
         }
     }
@@ -99,7 +108,7 @@ public class Hacker : MonoBehaviour {
     void YouWin() {
         currentScreen = screen.Win;
         Terminal.ClearScreen();
-        Terminal.WriteLine("Connected to the " + level);
+        Terminal.WriteLine("Connected to the " + levelNames[(level - 1)] );
         Terminal.WriteLine("(type 'exit' to exit)");
     }
 
