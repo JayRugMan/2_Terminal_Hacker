@@ -92,12 +92,12 @@ public class Hacker : MonoBehaviour {
 
     void GuessPassword(string input) {
         if (input == pw) {
-            YouWin();
+            DisplayWinScreen();
         }
         else {
             attemptsLeft--;
             if (attemptsLeft == 0) {
-                YouFail();
+                DisplayFailScreen();
             }    
             else {
                 StartGame(attemptsLeft);
@@ -105,17 +105,45 @@ public class Hacker : MonoBehaviour {
         }
     }
 
-    void YouWin() {
+    void DisplayWinScreen() {
         currentScreen = screen.Win;
         Terminal.ClearScreen();
         Terminal.WriteLine("Connected to the " + levelNames[(level - 1)] );
         Terminal.WriteLine("(type 'exit' to exit)");
+        ShowLevelReward();
     }
 
-    void YouFail() {
+    void ShowLevelReward() {
+        switch(level) {
+            case 1:
+                Terminal.WriteLine(@"
+
+                 S S S
+                _| | |_
+              _{._._._.}_
+             { . _ . _ . }
+           __(@#@#@#@#@#@)__
+          ~~~~~C~~A~~K~~E~~~~"
+                );
+                break;
+            case 2: {
+                Terminal.WriteLine(@"
+
+  |_________________________________|
+  | | | | | | | | | | | | | | | | | |
+  | L L | L L L | L L | L L L | L L |
+  |_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|
+ "
+                );
+                break;
+            }
+        }
+    }
+
+    void DisplayFailScreen() {
         currentScreen = screen.Caught;
         Terminal.ClearScreen();
-        Terminal.WriteLine("Unauthorized Access Detected!");
+        Terminal.WriteLine("Unauthorized Access Attempts Detected!");
         Terminal.WriteLine("The authorities have been alerted!!!!!!");
         Terminal.WriteLine("Tracing has begun... CUT TAIL AND RUN!!");
     }

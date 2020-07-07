@@ -1,4 +1,4 @@
-=== Hacker Terminal Notes ===
+= Hacker Terminal Notes ===
 
 = Anagrams =
 Easy (Theme: Cooking)
@@ -9,6 +9,13 @@ Easy (Theme: Cooking)
 5- saute
 6- noodle
 
+                 S S S
+                _| | |_
+              _{._._._.}_
+             { . _ . _ . }
+           __(@#@#@#@#@#@)__
+          ~~~~~C~~A~~K~~E~~~~
+
 Medium (Theme: Music)
 1- legato
 2- microphone
@@ -17,6 +24,35 @@ Medium (Theme: Music)
 5- instrument
 6- soprano
 
+
+     _
+    (.)
+  O-|.\
+  O-|. \
+  O-|.  )
+  O-| \(
+     \\\\
+      \\\\
+       \\\\
+        \\\\
+         \\\\  ''
+    ..    \\\\_)  '.
+    . '_._)\\\\    .
+     '.     \\\\   '
+       '.    \\\\ o ' .
+         )    \\\\ o   '
+        |      \\\\ o   '   
+       (        \\\\    '
+        \        oooo  .-
+         ' - .__.- - -'
+
+
+  |_________________________________|
+  | | | | | | | | | | | | | | | | | |
+  | L L | L L L | L L | L L L | L L |
+  |_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|
+
+ 
 Hard (Theme: Infomration Technology)
 1- motherboard
 2- hexidecimal
@@ -24,3 +60,6 @@ Hard (Theme: Infomration Technology)
 4- interface
 5- environment
 6- virtualization
+
+
+
