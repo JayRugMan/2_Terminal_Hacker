@@ -5,7 +5,7 @@ using UnityEngine;
 public class Hacker : MonoBehaviour {
 
     // Game configuration
-    string exitHint = "(Type \"exit\" for main menu)";
+    const string exitHint = "(Type \"exit\" for main menu)";
     string[][] allPasswords = { 
         new string[] { "apron", "knife", "sink", "noodle", "oven", "toaster" },
         new string[] { "microphone", "boombox", "melodious", "instrument", "legato", "synthesizer", "soprano" },
