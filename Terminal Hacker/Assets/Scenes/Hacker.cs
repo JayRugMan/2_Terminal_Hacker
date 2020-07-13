@@ -7,14 +7,15 @@ public class Hacker : MonoBehaviour {
     // Game configuration
     string[][] allPasswords = { 
         new string[] { "apron", "knife", "sink", "noodle", "oven", "toaster" },
-        new string[] { "microphone", "boombox", "melodious", "instrument" }
+        new string[] { "microphone", "boombox", "melodious", "instrument", "legato", "synthesizer", "soprano" },
+        new string[] { "motherboard", "hexidecimal", "virtualization", "interface", "environment", "initiator" }
     };
 
     // Game State
     int level;
-    string[] levelNames = { "kitchen", "sound system", "smarthome core system" };
+    string[] levelNames = { "kitchen", "sound system", "smart-home core system" };
     int attemptsLeft;
-    string pw;
+    string password;
     enum screen { MainMenu, Password, Win, Caught }
     screen currentScreen;
 
@@ -50,7 +51,7 @@ public class Hacker : MonoBehaviour {
                         RunMainMenu(input);
                         break;
                     case screen.Password:
-                        GuessPassword(input);
+                        CheckPassword(input);
                         break;
                     case screen.Win:
                         if (input == "exit") {
@@ -61,17 +62,18 @@ public class Hacker : MonoBehaviour {
                 }
             }
         }
+        else if (input == "pkill -9 trace && reset") {
+            string greeting = "Trace process killed\nSystem reset";
+            ShowMainMenu(greeting);
+        }
 	}
 
     void RunMainMenu(string input) {
-        bool isValidLevelNumber = ( input == "1" || input == "2" );
+        bool isValidLevelNumber = ( input == "1" || input == "2" || input == "3" );
         if (isValidLevelNumber) {
             level = int.Parse(input);
-            attemptsLeft = (6 / level);  // gets harder at each level
-            int index1 = level - 1;
-            int index2 = Random.Range(0, allPasswords[index1].Length);
-            pw = allPasswords[index1][index2];
-            StartGame(attemptsLeft);
+            SetRandomPassword(level);
+            AskForPassword(attemptsLeft);
         }
         else if (input == "1234") {  // easter egg
             print("That was a secret");
@@ -82,16 +84,23 @@ public class Hacker : MonoBehaviour {
             Terminal.WriteLine("Select from the listed options:");
         }
     }
+
+    void SetRandomPassword(int level) {
+        attemptsLeft = (6 / level);  // gets harder at each level
+        int index1 = level - 1;
+        int index2 = Random.Range(0, allPasswords[index1].Length);
+        password = allPasswords[index1][index2];
+    }
     
-    void StartGame(int attemptsLeft) { 
+    void AskForPassword(int attemptsLeft) { 
         currentScreen = screen.Password;
         Terminal.ClearScreen();
         Terminal.WriteLine( attemptsLeft + " Attept(s) left to access " + levelNames[(level - 1)] );
-        Terminal.WriteLine("Password: ");
+        Terminal.WriteLine("enter password, hint: " + password.Anagram());
     }
 
-    void GuessPassword(string input) {
-        if (input == pw) {
+    void CheckPassword(string input) {
+        if (input == password) {
             DisplayWinScreen();
         }
         else {
@@ -100,7 +109,7 @@ public class Hacker : MonoBehaviour {
                 DisplayFailScreen();
             }    
             else {
-                StartGame(attemptsLeft);
+                AskForPassword(attemptsLeft);
             }
         }
     }
@@ -126,7 +135,7 @@ public class Hacker : MonoBehaviour {
           ~~~~~C~~A~~K~~E~~~~"
                 );
                 break;
-            case 2: {
+            case 2: 
                 Terminal.WriteLine(@"
 
   |_________________________________|
@@ -136,7 +145,15 @@ public class Hacker : MonoBehaviour {
  "
                 );
                 break;
-            }
+            case 3:
+                Terminal.WriteLine(@"
+  __                     _           
+ (        _ _/  _  _    / )     _  _ 
+__)  (/ _)  /  (- //)  (__  () /  (- 
+     /                               
+"
+                );
+                break;
         }
     }
 
