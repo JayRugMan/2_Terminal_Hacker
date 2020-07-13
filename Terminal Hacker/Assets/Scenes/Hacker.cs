@@ -5,23 +5,24 @@ using UnityEngine;
 public class Hacker : MonoBehaviour {
 
     // Game configuration
+    string exitHint = "(Type \"exit\" for main menu)";
     string[][] allPasswords = { 
         new string[] { "apron", "knife", "sink", "noodle", "oven", "toaster" },
         new string[] { "microphone", "boombox", "melodious", "instrument", "legato", "synthesizer", "soprano" },
         new string[] { "motherboard", "hexidecimal", "virtualization", "interface", "environment", "initiator" }
     };
+    string playerName = "Jason";
+    int attemptsLeft;
+    string password;
 
     // Game State
     int level;
-    string[] levelNames = { "kitchen", "sound system", "smart-home core system" };
-    int attemptsLeft;
-    string password;
+    string[] levelNames = { "kitchen", "sound system", "home system core" };
     enum screen { MainMenu, Password, Win, Caught }
     screen currentScreen;
 
     // Start is called before the first frame update
     void Start() {
-        string playerName = "Jason";
         string greeting = "Hello " + playerName;
         ShowMainMenu(greeting);
     }
@@ -38,10 +39,8 @@ public class Hacker : MonoBehaviour {
     }
 
 	void OnUserInput(string input) {
-        string playerName = "Jason";
         if (currentScreen != screen.Caught) {
-		    if (input == "menu") {  // typing "menu" will always get you to main menu, unless caught
-                print("Returing to Main Menu.");
+            if (input == "exit") {  // typing "exit" will always get you to main menu, unless caught
                 string greeting = "Sure, " + playerName + ", have another go.";
                 ShowMainMenu(greeting);
             }
@@ -54,15 +53,13 @@ public class Hacker : MonoBehaviour {
                         CheckPassword(input);
                         break;
                     case screen.Win:
-                        if (input == "exit") {
-                            string greeting = "Hello " + playerName;
-                            ShowMainMenu(greeting);
-                        }
+                        print("Not sure what yet"); // Need something you can do when you gain access
+                        Terminal.WriteLine(exitHint);
                         break;
                 }
             }
         }
-        else if (input == "pkill -9 trace && reset") {
+        else if (input == "pkill -9 trace && reset") { // if caught, only killing the trace and resetting the system will get you back to the main menu
             string greeting = "Trace process killed\nSystem reset";
             ShowMainMenu(greeting);
         }
@@ -71,22 +68,35 @@ public class Hacker : MonoBehaviour {
     void RunMainMenu(string input) {
         bool isValidLevelNumber = ( input == "1" || input == "2" || input == "3" );
         if (isValidLevelNumber) {
-            level = int.Parse(input);
-            SetRandomPassword(level);
-            AskForPassword(attemptsLeft);
+            ValidLevelSelected(input);
         }
         else if (input == "1234") {  // easter egg
-            print("That was a secret");
-            string greeting = "Hey, who told you my luggage combo?!";
-            ShowMainMenu(greeting);
+            EasterEggSelected();
         }
         else {
             Terminal.WriteLine("Select from the listed options:");
+            Terminal.WriteLine(exitHint);
         }
     }
 
-    void SetRandomPassword(int level) {
+    void ValidLevelSelected(string input) {
+        level = int.Parse(input);
+        SetAttempts(level);
+        SetRandomPassword(level);
+        AskForPassword(attemptsLeft);
+    }
+
+    void EasterEggSelected() {
+        print("That was a secret");
+        string greeting = "Hey, who told you my luggage combo?!";
+        ShowMainMenu(greeting);
+    }
+
+    void SetAttempts(int level) {
         attemptsLeft = (6 / level);  // gets harder at each level
+    } 
+
+    void SetRandomPassword(int level) {
         int index1 = level - 1;
         int index2 = Random.Range(0, allPasswords[index1].Length);
         password = allPasswords[index1][index2];
@@ -97,6 +107,7 @@ public class Hacker : MonoBehaviour {
         Terminal.ClearScreen();
         Terminal.WriteLine( attemptsLeft + " Attept(s) left to access " + levelNames[(level - 1)] );
         Terminal.WriteLine("enter password, hint: " + password.Anagram());
+        Terminal.WriteLine(exitHint);
     }
 
     void CheckPassword(string input) {
@@ -104,13 +115,7 @@ public class Hacker : MonoBehaviour {
             DisplayWinScreen();
         }
         else {
-            attemptsLeft--;
-            if (attemptsLeft == 0) {
-                DisplayFailScreen();
-            }    
-            else {
-                AskForPassword(attemptsLeft);
-            }
+            CheckFail();
         }
     }
 
@@ -118,21 +123,31 @@ public class Hacker : MonoBehaviour {
         currentScreen = screen.Win;
         Terminal.ClearScreen();
         Terminal.WriteLine("Connected to the " + levelNames[(level - 1)] );
-        Terminal.WriteLine("(type 'exit' to exit)");
         ShowLevelReward();
+        Terminal.WriteLine(exitHint);
+    }
+
+    void CheckFail() {
+        attemptsLeft--;
+        if (attemptsLeft == 0) {
+            DisplayFailScreen();
+        }    
+        else {
+            AskForPassword(attemptsLeft);
+        }
     }
 
     void ShowLevelReward() {
         switch(level) {
             case 1:
                 Terminal.WriteLine(@"
-
                  S S S
                 _| | |_
               _{._._._.}_
              { . _ . _ . }
            __(@#@#@#@#@#@)__
-          ~~~~~C~~A~~K~~E~~~~"
+          ~~~~~C~~A~~K~~E~~~~
+          "
                 );
                 break;
             case 2: 
