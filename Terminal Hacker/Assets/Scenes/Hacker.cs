@@ -11,20 +11,26 @@ public class Hacker : MonoBehaviour {
         new string[] { "microphone", "boombox", "melodious", "instrument", "legato", "synthesizer", "soprano" },
         new string[] { "motherboard", "hexidecimal", "virtualization", "interface", "environment", "initiator" }
     };
-    string playerName = "Jason";
+    string playerName = "";
     int attemptsLeft;
     string password;
 
     // Game State
     int level;
     string[] levelNames = { "kitchen", "sound system", "home system core" };
-    enum screen { MainMenu, Password, Win, Caught }
+    enum screen { Intro, MainMenu, Password, Win, Caught }
     screen currentScreen;
 
     // Start is called before the first frame update
     void Start() {
+        Intro();
         string greeting = "Hello " + playerName;
         ShowMainMenu(greeting);
+    }
+
+    void Intro() {
+        currentScreen = screen.Intro;
+        Terminal.WriteLine("Enter name: ");
     }
 
     void ShowMainMenu(string tagline) {
@@ -46,6 +52,9 @@ public class Hacker : MonoBehaviour {
             }
             else{
                 switch (currentScreen) {
+                    case screen.Intro:
+                        playerName = input;
+                        break;
                     case screen.MainMenu:
                         RunMainMenu(input);
                         break;
