@@ -23,12 +23,10 @@ public class Hacker : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        Intro();
-        string greeting = "Hello " + playerName;
-        ShowMainMenu(greeting);
+        ShowIntro();
     }
 
-    void Intro() {
+    void ShowIntro() {
         currentScreen = screen.Intro;
         Terminal.WriteLine("Enter name: ");
     }
@@ -54,6 +52,8 @@ public class Hacker : MonoBehaviour {
                 switch (currentScreen) {
                     case screen.Intro:
                         playerName = input;
+                        string greeting = "Hello " + playerName;
+                        ShowMainMenu(greeting);
                         break;
                     case screen.MainMenu:
                         RunMainMenu(input);
